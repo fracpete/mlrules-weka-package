@@ -101,7 +101,7 @@ import weka.filters.unsupervised.attribute.NominalToBinary;
  */
 
 
-public class MLRules extends AbstractClassifier implements OptionHandler, TechnicalInformationHandler{
+public class MLRules extends RandomizableClassifier implements OptionHandler, TechnicalInformationHandler{
 
   private static final long serialVersionUID = -8648177886116759812L;
 
@@ -430,7 +430,7 @@ public class MLRules extends AbstractClassifier implements OptionHandler, Techni
     ruleBuilder = new RuleBuilder(nu, useLineSearch, (minimization == 0), chooseClass, R, Rp);
     ruleBuilder.initialize(this.instances);
 
-    mainRandomGenerator = new Random();
+    mainRandomGenerator = new Random(m_Seed);
   }
 
   public void updateFunctionWhenRemoval(Rule rule) {
