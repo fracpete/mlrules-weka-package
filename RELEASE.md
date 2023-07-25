@@ -16,7 +16,7 @@ Preparation
   ```
   Version=2016.12.7
   Date=2016-12-07
-  PackageURL=https://github.com/fracpete/fastrandomforest-weka-package/releases/download/v2016.12.7/fastrandomforest-2016.12.7.zip
+  PackageURL=https://github.com/fracpete/mlrules-weka-package/releases/download/v2016.12.7/mlrules-2016.12.7.zip
   ```
 
 Weka package
@@ -27,7 +27,7 @@ Weka package
 * Run the following command to generate the package archive for version `2016.12.7`:
 
   ```
-  ant -f build_package.xml -Dpackage=fastrandomforest-2016.12.7 clean make_package
+  ant -f build_package.xml -Dpackage=mlrules-2016.12.7 clean make_package
   ```
 
 * Create a release tag on github (v2016.12.7)
