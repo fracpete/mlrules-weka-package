@@ -50,16 +50,16 @@ import java.util.Vector;
 /**
  <!-- globalinfo-start -->
  * Maximum Likelihood Rule Ensembles (MLRules) - class for building a rule ensemble
- * for classification via estimating the conditional class probabilities.<br/>
- * Rules are combined in additive way.<br/>
- * <br/>
- * For more information, see:<br/>
- * <br/>
- * Krzysztof Dembczynski, Wojciech Kotlowski, Roman Slowinski:<br/>
- * <i>Maximum Likelihood Rule Ensembles</i><br/>
- * Proceedings of the 25th International Conference on Machine Learning (ICML 2008).<br/>
+ * for classification via estimating the conditional class probabilities.<br>
+ * Rules are combined in additive way.<br>
+ * <br>
+ * For more information, see:<br>
+ * <br>
+ * Krzysztof Dembczynski, Wojciech Kotlowski, Roman Slowinski:<br>
+ * <i>Maximum Likelihood Rule Ensembles</i><br>
+ * Proceedings of the 25th International Conference on Machine Learning (ICML 2008).<br>
  * Helsinki, Finland.
- * <p/>
+ * <br>
  <!-- globalinfo-end -->
  *
  <!-- technical-bibtex-start -->
@@ -79,11 +79,11 @@ import java.util.Vector;
  pages     = {224--231}
  }
  * </pre>
- * <p/>
+ * <br>
  <!-- technical-bibtex-end -->
  *
  <!-- options-start -->
- * Valid options are: <p/>
+ * Valid options are: <br>
  *
  * <pre> -M &lt;number of rules&gt;
  *  Set the number of rules, i.e. the ensemble size.
@@ -522,10 +522,10 @@ public class MLRules extends RandomizableClassifier implements OptionHandler, Te
   }
 
   /**
-   * Parses a given list of options. <p/>
+   * Parses a given list of options. <br>
    *
    <!-- options-start -->
-   * Valid options are: <p/>
+   * Valid options are: <br>
    *
    * <pre> -M &lt;number of rules&gt;
    *  Set the number of rules, i.e. the ensemble size.
