@@ -258,7 +258,7 @@ public class MLRules extends AbstractClassifier implements OptionHandler, Techni
    * @return the capabilities of this classifier
    */
   public Capabilities getCapabilities() {
-    Capabilities result = super.getCapabilities();
+    Capabilities result = new Capabilities(this);
 
     result.enable(Capability.NOMINAL_ATTRIBUTES);
     result.enable(Capability.BINARY_ATTRIBUTES);
