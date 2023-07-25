@@ -5,7 +5,7 @@
 
   <groupId>com.github.fracpete</groupId>
   <artifactId>mlrules-weka-package</artifactId>
-  <version>2023.7.26</version>
+  <version>2023.7.27-SNAPSHOT</version>
   <packaging>jar</packaging>
 
   <name>mlrules</name>
