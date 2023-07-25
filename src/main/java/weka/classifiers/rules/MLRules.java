@@ -20,21 +20,32 @@
 
 package weka.classifiers.rules;
 
-import java.util.Arrays;
-import java.util.Enumeration;
-import java.util.Random;
-import java.util.Vector;
-
 import put.idss.mlrules.Rule;
 import put.idss.mlrules.RuleBuilder;
-
-import weka.classifiers.*;
-import weka.core.*;
+import weka.classifiers.RandomizableClassifier;
+import weka.core.Attribute;
+import weka.core.Capabilities;
 import weka.core.Capabilities.Capability;
+import weka.core.Instance;
+import weka.core.Instances;
+import weka.core.Option;
+import weka.core.OptionHandler;
+import weka.core.SelectedTag;
+import weka.core.Tag;
+import weka.core.TechnicalInformation;
 import weka.core.TechnicalInformation.Field;
 import weka.core.TechnicalInformation.Type;
+import weka.core.TechnicalInformationHandler;
+import weka.core.Utils;
 import weka.filters.Filter;
 import weka.filters.unsupervised.attribute.NominalToBinary;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Enumeration;
+import java.util.List;
+import java.util.Random;
+import java.util.Vector;
 
 /**
  <!-- globalinfo-start -->
@@ -99,8 +110,6 @@ import weka.filters.unsupervised.attribute.NominalToBinary;
  * @author Wojciech Kotlowski (wkotlowski@cs.put.poznan.pl)
  * @author Krzysztof Dembczynski (kdembczynski@cs.put.poznan.pl)
  */
-
-
 public class MLRules extends RandomizableClassifier implements OptionHandler, TechnicalInformationHandler{
 
   private static final long serialVersionUID = -8648177886116759812L;
@@ -114,7 +123,6 @@ public class MLRules extends RandomizableClassifier implements OptionHandler, Te
   };
 
   private boolean modelBuilt = false;
-
 
   /**
    * covered instances
@@ -225,7 +233,6 @@ public class MLRules extends RandomizableClassifier implements OptionHandler, Te
    * @return the technical information about this class
    */
   public TechnicalInformation getTechnicalInformation() {
-
     TechnicalInformation result;
     result = new TechnicalInformation(Type.INPROCEEDINGS);
 
@@ -246,7 +253,6 @@ public class MLRules extends RandomizableClassifier implements OptionHandler, Te
    * displaying in the explorer/experimenter gui
    */
   public String globalInfo() {
-
     return "Maximum Likelihood Rule Ensembles (MLRules) - class for building a rule ensemble "
       + "for classification via estimating the conditional class probabilities.\n"
       + "Rules are combined in additive way.\n\n"
@@ -277,7 +283,6 @@ public class MLRules extends RandomizableClassifier implements OptionHandler, Te
    * @return a description of the classifier as a string.
    */
   public String toString() {
-
     if (!modelBuilt) {
       return "Maximum Likelihood Rule Ensembles (MLRules): No model built yet.";
     }
@@ -328,7 +333,6 @@ public class MLRules extends RandomizableClassifier implements OptionHandler, Te
     return "The total number of rules.";
   }
 
-
   public double[] getF(int position) {
     return f[position];
   }
@@ -342,11 +346,8 @@ public class MLRules extends RandomizableClassifier implements OptionHandler, Te
   }
 
   public short[] resample (double percentage) {
-
     short [] subSample = new short[N];
-
     int subsampleSize = (int) (N * percentage);
-
     Random random = new Random(mainRandomGenerator.nextInt());
 
     int[] indices = new int[N];
@@ -373,7 +374,6 @@ public class MLRules extends RandomizableClassifier implements OptionHandler, Te
    * @throws Exception if the classifier has not been generated successfully
    */
   public void buildClassifier(Instances instances) throws Exception {
-
     // can classifier handle the data?
     getCapabilities().testWithFail(instances);
 
@@ -403,7 +403,6 @@ public class MLRules extends RandomizableClassifier implements OptionHandler, Te
   }
 
   private void initialize(Instances instances) throws Exception{
-
     this.instances = new Instances(instances);
 
     ntb = new NominalToBinary();
@@ -448,7 +447,6 @@ public class MLRules extends RandomizableClassifier implements OptionHandler, Te
   }
 
   public double[] evaluateF(Instance instance) {
-
     double [] evalF = new double[K];
 
     ntb.input(instance);
@@ -516,6 +514,10 @@ public class MLRules extends RandomizableClassifier implements OptionHandler, Te
 	+ "\t\t1 = Newton-Raphson.",
       "Q", 1, "-Q <technique>"));
 
+    Enumeration en = super.listOptions();
+    while (en.hasMoreElements())
+      result.addElement((Option) en.nextElement());
+
     return result.elements();
   }
 
@@ -551,7 +553,6 @@ public class MLRules extends RandomizableClassifier implements OptionHandler, Te
    * @throws Exception if an option is not supported
    */
   public void setOptions(String[] options) throws Exception {
-
     String stringM = Utils.getOption('M', options);
     if (stringM.length() != 0)
       nRules = Integer.parseInt(stringM);
@@ -570,6 +571,7 @@ public class MLRules extends RandomizableClassifier implements OptionHandler, Te
     if (stringTechnique.length() != 0)
       minimization = Integer.parseInt(stringTechnique);
 
+    super.setOptions(options);
   }
 
   /**
@@ -578,8 +580,7 @@ public class MLRules extends RandomizableClassifier implements OptionHandler, Te
    * @return an array of strings suitable for passing to setOptions
    */
   public String[] getOptions() {
-
-    Vector<String> results = new Vector<String>();
+    List<String> results = new ArrayList<String>();
 
     results.add("-M");
     results.add("" + nRules);
@@ -596,11 +597,10 @@ public class MLRules extends RandomizableClassifier implements OptionHandler, Te
     results.add("-Q");
     results.add("" + minimization);
 
+    results.addAll(Arrays.asList(super.getOptions()));
+
     return results.toArray(new String[results.size()]);
   }
-
-
-
 
   /**
    * Classifies a given instance.
@@ -644,11 +644,8 @@ public class MLRules extends RandomizableClassifier implements OptionHandler, Te
     return evalsF;
   }
 
-
   public double[] multipleClassifyInstance(Instance instance) {
-
     double[][] values = multipleEvaluateF(instance);
-
     double[] curve = new double[nRules];
 
     for (int j = 0; j < nRules; j++) {
@@ -660,7 +657,6 @@ public class MLRules extends RandomizableClassifier implements OptionHandler, Te
     }
     return curve;
   }
-
 
   public double computeEmpiricalRisk() {
     double empiricalRisk = 0;
@@ -745,9 +741,6 @@ public class MLRules extends RandomizableClassifier implements OptionHandler, Te
   }
 
   */
-  public static void main(String[] args) {
-    runClassifier(new MLRules(), args);
-  }
 
   public String nuTipText() {
     return "Shrinkage.";
@@ -762,14 +755,12 @@ public class MLRules extends RandomizableClassifier implements OptionHandler, Te
   }
 
   public void setMinimization(SelectedTag newType) {
-
     if (newType.getTags() == TAGS_MINIMIZER) {
       minimization = newType.getSelectedTag().getID();
     }
   }
 
   public SelectedTag getMinimization() {
-
     return new SelectedTag(minimization, TAGS_MINIMIZER);
   }
 
@@ -777,4 +768,7 @@ public class MLRules extends RandomizableClassifier implements OptionHandler, Te
     return "Minimization technique.";
   }
 
+  public static void main(String[] args) {
+    runClassifier(new MLRules(), args);
+  }
 }
